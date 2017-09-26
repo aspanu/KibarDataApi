@@ -55,13 +55,11 @@ class UserActivityPersistence {
 
     fun checkInUser(user: User, activity: Activity): String {
         val payload = "User with id: ${user.id} checked in for activity: ${activity.name}"
-        println(payload)
         return payload
     }
 
     fun registerUser(user: User, activity: Activity): String {
         val payload = "User with id: ${user.id} registered for activity ${activity.name}"
-        println(payload)
         return payload
     }
 
