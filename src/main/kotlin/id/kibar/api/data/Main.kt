@@ -1,55 +1,51 @@
 package id.kibar.api.data
 
-import id.kibar.api.data.dao.UserDao
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import id.kibar.api.data.entity.User
+import id.kibar.api.data.service.RegistrationService
 import io.javalin.Javalin
+import javax.xml.ws.http.HTTPException
 
 fun main(args: Array<String>) {
 
-    val userDao = UserDao()
+    val regService = RegistrationService()
 
     val app = Javalin.create().port(7070).start()
 
     with(app) {
 
-        get("/users") { ctx ->
-            ctx.json(userDao.users)
+        get("/user/emailIdentification/:email") { ctx ->
+            ctx.json(regService.getUserIdForEmail(ctx.param("email")!!))
         }
 
-        get("/users/:id") { ctx ->
-            ctx.json(userDao.findById(ctx.param("id")!!.toInt())!!)
+        post("/user/checkIn") { ctx ->
+            ctx.json(regService.checkIn(ctx.queryParam("userId")!!.toInt(), ctx.queryParam("activityId")!!.toInt()))
         }
 
-        get("/users/email/:email") { ctx ->
-            ctx.json(userDao.findByEmail(ctx.param("email")!!)!!)
+        post("/user/activity/register") { ctx ->
+            ctx.json(
+                regService.registerUserForActivity(
+                    ctx.queryParam("userId")!!.toInt(),
+                    ctx.queryParam("activityId")!!.toInt()
+            ))
         }
 
-        post("/users/create") { ctx ->
-            val user = ctx.bodyAsClass(User::class.java)
-            userDao.save(name = user.firstName, email = user.email)
-            ctx.status(201)
+        post("/user/signIn") { ctx ->
+            val sub = ctx.formParam("sub") ?: throw HTTPException(400)
+            val email = ctx.formParam("email") ?: throw HTTPException(400)
+            val name = ctx.formParam("name") ?: ""
+            val newUser = regService.signInUserIsNew(name = name, email = email, sub = sub)
+            ctx.status(201).json(newUser)
         }
 
-        patch("/users/update/:id") { ctx ->
-            val user = ctx.bodyAsClass(User::class.java)
-            userDao.update(
-                    id = ctx.param("id")!!.toInt(),
-                    user = user
-            )
-            ctx.status(204)
-        }
-
-        delete("/users/delete/:id") { ctx ->
-            userDao.delete(ctx.param("id")!!.toInt())
-            ctx.status(204)
-        }
-
-        exception(Exception::class.java) { e, ctx ->
-            e.printStackTrace()
-        }
-
-        error(404) { ctx ->
-            ctx.json("error");
+        post("/user/update") { ctx ->
+            val mapper = ObjectMapper().registerKotlinModule()
+            val user = mapper.readValue(ctx.body(), User::class.java)
+            regService.findByEmail(user.email) ?: throw HTTPException(400)
+            user.id = regService.getUserIdForEmail(user.email)
+            regService.save(user)
+            ctx.status(200).json("Updated user: ${user.id} successfully")
         }
     }
 
