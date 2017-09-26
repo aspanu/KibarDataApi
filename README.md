@@ -10,3 +10,7 @@ Make sure you have maven installed on your machine
 2. Run `mvn exec:java`
 
 3. You now have an Api server running on port 7070
+
+## Db Install Instructions
+
+Can be found [in this location](docs/installingDb.md).
