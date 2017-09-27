@@ -16,15 +16,14 @@ class RegistrationService {
     }
 
     fun findByEmail(email: String): User? {
-        val users = userPersistence.getUsers()
-        return users.find { it.email == email }
+        return userPersistence.getUserWithEmail(email)
     }
 
-    fun save(user: User) {
+    fun save(user: User): User {
         if (user.id == 0 && getUserIdForEmail(user.email) == -1)
-            userPersistence.addUser(user)
+            return userPersistence.addUser(user)
         else
-            userPersistence.updateUser(user)
+            return userPersistence.updateUser(user)
     }
 
     fun checkIn(userId: Int, activityId: Int): String {

@@ -23,15 +23,15 @@ PRIMARY KEY (id)
 CREATE TABLE users
 (
 id INTEGER AUTO_INCREMENT UNIQUE ,
-firstName VARCHAR(100),
-lastName VARCHAR(100),
+first_name VARCHAR(100),
+last_name VARCHAR(100),
 email VARCHAR(1000),
 google_sub_id VARCHAR(100),
 company VARCHAR(1000),
 position VARCHAR(100),
 user_type VARCHAR(100), # Enum
 creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-last_update_time DATE,
+last_update_time DATETIME,
 PRIMARY KEY (id)
 );
 

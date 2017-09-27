@@ -10,23 +10,34 @@
 
     <name>id.kibar.api.data kibar-api-data</name>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-kotlin-exposed</id>
-            <name>bintray</name>
-            <url>https://dl.bintray.com/kotlin/exposed</url>
-        </repository>
-    </repositories>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.1.50</kotlin.version>
         <junit.version>4.12</junit.version>
         <jackson.version>2.9.1</jackson.version>
     </properties>
+
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+            <!--<id>bintray-kotlin-exposed</id>-->
+            <!--<name>bintray</name>-->
+            <!--<url>https://dl.bintray.com/kotlin/exposed</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
+
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+            <!--<id>bintray-kotlin-exposed</id>-->
+            <!--<name>bintray-plugins</name>-->
+            <!--<url>https://dl.bintray.com/kotlin/exposed</url>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
     <dependencies>
         <dependency>
@@ -71,6 +82,16 @@
             <artifactId>exposed</artifactId>
             <version>0.8.5</version>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>2.1.2</version>
         </dependency>
     </dependencies>
 

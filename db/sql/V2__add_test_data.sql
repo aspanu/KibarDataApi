@@ -1,9 +1,9 @@
-insert into USERS (firstName, lastName, email, company, position)
+insert into USERS (first_name, last_name, email, google_sub_id, company, position, user_type)
 values
-('Alice', 'Herianto', 'alice@kibar.id', 'Kibar', 'VP of Cool'),
-('Bob', 'Suparman', 'bob@kibar.id', 'Kibar', 'Managing Director of Badassery'),
-('Carol', 'Wulandari', 'carol@kibar.id', '1000 Startups', 'President of Awesome'),
-('Dave', 'Prasetyo', 'dave@kibar.id', 'DevNet', 'Lead Amazinger');
+('Alice', 'Herianto', 'alice@kibar.id', 'sub1', 'Kibar', 'VP of Cool', 'PARTICIPANT'),
+('Bob', 'Suparman', 'bob@kibar.id', 'sub1', 'Kibar', 'Managing Director of Badassery', 'PARTICIPANT'),
+('Carol', 'Wulandari', 'carol@kibar.id', 'sub1', '1000 Startups', 'President of Awesome', 'PARTICIPANT'),
+('Dave', 'Prasetyo', 'dave@kibar.id', 'sub1', 'DevNet', 'Lead Amazinger', 'ADMIN');
 
 insert into ACTIVITIES (name, activity_date, description)
 values

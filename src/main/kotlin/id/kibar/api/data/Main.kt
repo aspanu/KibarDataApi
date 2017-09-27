@@ -28,7 +28,7 @@ fun main(args: Array<String>) {
                 regService.registerUserForActivity(
                     ctx.queryParam("userId")!!.toInt(),
                     ctx.queryParam("activityId")!!.toInt()
-            ))
+                ))
         }
 
         post("/user/signIn") { ctx ->
@@ -42,8 +42,6 @@ fun main(args: Array<String>) {
         post("/user/update") { ctx ->
             val mapper = ObjectMapper().registerKotlinModule()
             val user = mapper.readValue(ctx.body(), User::class.java)
-            regService.findByEmail(user.email) ?: throw HTTPException(400)
-            user.id = regService.getUserIdForEmail(user.email)
             regService.save(user)
             ctx.status(200).json("Updated user: ${user.id} successfully")
         }
