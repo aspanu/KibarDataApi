@@ -20,15 +20,16 @@ fun main(args: Array<String>) {
         }
 
         post("/user/checkIn") { ctx ->
-            ctx.json(regService.checkIn(ctx.queryParam("userId")!!.toInt(), ctx.queryParam("activityId")!!.toInt()))
+            regService.checkIn(ctx.queryParam("userId")!!.toInt(), ctx.queryParam("activityId")!!.toInt())
+            ctx.status(204)
         }
 
         post("/user/activity/register") { ctx ->
-            ctx.json(
-                regService.registerUserForActivity(
-                    ctx.queryParam("userId")!!.toInt(),
-                    ctx.queryParam("activityId")!!.toInt()
-                ))
+            regService.registerUserForActivity(
+                ctx.queryParam("userId")!!.toInt(),
+                ctx.queryParam("activityId")!!.toInt()
+            )
+            ctx.status(204)
         }
 
         post("/user/signIn") { ctx ->

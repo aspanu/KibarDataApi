@@ -1,11 +1,12 @@
 package id.kibar.api.data.persistence
 
 import id.kibar.api.data.entity.Activity
+import id.kibar.api.data.entity.ActivityFactory
+import id.kibar.api.data.entity.ActivityInteraction
 import id.kibar.api.data.entity.User
 import id.kibar.api.data.entity.UserFactory
 import java.sql.Statement
 import java.sql.Timestamp
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 
@@ -91,7 +92,6 @@ class UserPersistence {
         return newUser
     }
 
-
     fun hasUserWithSub(sub: String): Boolean {
         val stm = DbPool.getConnection().prepareStatement("SELECT COUNT(*) FROM $userTable WHERE google_sub_id=?")
         stm.setString(1, sub)
@@ -139,28 +139,54 @@ class UserPersistence {
 
 class UserActivityPersistence {
 
-    fun checkInUser(user: User, activity: Activity): String {
-        val payload = "User with id: ${user.id} checked in for activity: ${activity.name}"
-        return payload
+    private val userActivityTable = "user_activity"
+
+    private fun createInteraction(userId: Int, activityId: Int, interaction: ActivityInteraction) {
+        val conn = DbPool.getConnection()
+        conn.autoCommit = false
+        try {
+
+            val stm = conn.prepareStatement(
+                "INSERT INTO $userActivityTable (user_id, activity_id, interaction_type) VALUES (?, ?, ?);"
+            )
+            stm.setInt(1, userId)
+            stm.setInt(2, activityId)
+            stm.setString(3, interaction.name)
+
+            if (stm.executeUpdate() != 1) {
+                conn.rollback()
+                throw IllegalStateException("Insert statement should only update 1 record.")
+            }
+
+        } catch (e: Exception) {
+            conn.rollback()
+            throw e
+        }
+        conn.commit()
     }
 
-    fun registerUser(user: User, activity: Activity): String {
-        val payload = "User with id: ${user.id} registered for activity ${activity.name}"
-        return payload
+    fun checkInUser(user: User, activity: Activity) {
+        createInteraction(userId = user.id, activityId = activity.id, interaction = ActivityInteraction.CHECKIN)
+    }
+
+    fun registerUser(user: User, activity: Activity) {
+        createInteraction(userId = user.id, activityId = activity.id, interaction = ActivityInteraction.REGISTER)
     }
 
 }
 
 class ActivityPersistence {
-    private val activities = hashMapOf(
-        0 to Activity(name = "PWA", date = LocalDate.of(2017, 9, 12), description = "Progressive Web App"),
-        1 to Activity(id = 1, name = "Hackathon", date = LocalDate.of(2017, 9, 5), description = "Hackathon with a theme of sports and well-being"),
-        2 to Activity(id = 2, name = "Career Fair", date = LocalDate.of(2017, 9, 6), description = "Post hackathon career fair")
-    )
+
+    private val activityTable = "activities"
 
     fun getActivity(activityId: Int): Activity {
-        if (!activities.containsKey(activityId))
-            throw IllegalArgumentException()
-        return activities[activityId]!!
+        val stm = DbPool.getConnection().prepareStatement("SELECT * FROM $activityTable WHERE id=?")
+        stm.setInt(1, activityId)
+        val result = stm.executeQuery()
+        result.last()
+        if (result.row != 1)
+            throw IllegalStateException("Activity cannot be found or we have multiple activities with the same Id")
+        result.first()
+        return ActivityFactory().fromRow(result)
     }
 }

@@ -1,9 +1,9 @@
 
 CREATE TABLE user_activity
 (
-id INTEGER AUTO_INCREMENT UNIQUE ,
-user_id INTEGER UNIQUE ,
-activity_id INTEGER UNIQUE ,
+id BIGINT(20) AUTO_INCREMENT UNIQUE ,
+user_id INTEGER ,
+activity_id INTEGER ,
 creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
 interaction_type VARCHAR(8000), # Enum
 PRIMARY KEY (id)

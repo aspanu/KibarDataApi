@@ -31,6 +31,8 @@ object DbPool {
         config.addDataSourceProperty("cacheServerConfiguration", "true")
         config.addDataSourceProperty("elideSetAutoCommits", "true")
         config.addDataSourceProperty("maintainTimeStats", "false")
+        config.addDataSourceProperty("maxLifetime", "60000")
+
 
         hikariDataSource = HikariDataSource(config)
     }
