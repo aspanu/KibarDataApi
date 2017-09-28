@@ -16,21 +16,20 @@ class RegistrationService {
     }
 
     fun findByEmail(email: String): User? {
-        val users = userPersistence.getUsers()
-        return users.find { it.email == email }
+        return userPersistence.getUserWithEmail(email)
     }
 
-    fun save(user: User) {
+    fun save(user: User): User {
         if (user.id == 0 && getUserIdForEmail(user.email) == -1)
-            userPersistence.addUser(user)
+            return userPersistence.addUser(user)
         else
-            userPersistence.updateUser(user)
+            return userPersistence.updateUser(user)
     }
 
-    fun checkIn(userId: Int, activityId: Int): String {
+    fun checkIn(userId: Int, activityId: Int) {
         val user = userPersistence.getUser(userId)
         val activity = activityPersistence.getActivity(activityId)
-        return userActivityPersistence.checkInUser(user, activity)
+        userActivityPersistence.checkInUser(user, activity)
     }
 
     fun getUserIdForEmail(email: String): Int {
@@ -39,10 +38,10 @@ class RegistrationService {
         return userPersistence.getUserWithEmail(email).id
     }
 
-    fun registerUserForActivity(userId: Int, activityId: Int): String {
+    fun registerUserForActivity(userId: Int, activityId: Int) {
         val user = userPersistence.getUser(userId)
         val activity = activityPersistence.getActivity(activityId)
-        return userActivityPersistence.registerUser(user, activity)
+        userActivityPersistence.registerUser(user, activity)
     }
 
     fun signInUserIsNew(name: String, email: String, sub: String): Boolean {

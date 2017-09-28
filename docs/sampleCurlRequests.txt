@@ -4,19 +4,18 @@ Coming soon: actual tests for this.
 /user/emailIdentification/:email:
 
 curl --request GET \
-  --url http://localhost:7070/user/emailIdentification/bob@bob.kt
-
+  --url http://localhost:7070/user/emailIdentification/bob@kibar.id
 
 user/checkIn?userId=X&activityId=Y:
 
 curl --request POST \
-  --url 'http://localhost:7070/user/checkIn?activityId=0&userId=1'
+  --url 'http://localhost:7070/user/checkIn?activityId=2&userId=1'
 
 
 /user/activity/register?userId=X&activityId=Y:
 
 curl --request POST \
-  --url 'http://localhost:7070/user/activity/register?activityId=0&userId=1'
+  --url 'http://localhost:7070/user/activity/register?activityId=1&userId=1'
 
 
 /user/signIn:
@@ -33,7 +32,7 @@ curl --request POST \
   --url http://localhost:7070/user/update \
   --header 'content-type: application/json' \
   --data '{
-	"email": "alice@alice.kt",
+	"email": "alice@kibar.id",
 	"sub": "123",
 	"firstName": "First Name Updated User",
 	"lastName": "Last Name Updated User"
