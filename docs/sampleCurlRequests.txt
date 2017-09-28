@@ -37,3 +37,11 @@ curl --request POST \
 	"firstName": "First Name Updated User",
 	"lastName": "Last Name Updated User"
 }'
+
+
+/activity/create:
+
+curl --request POST \
+  --url http://localhost:7070/activity/create \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data 'name=New%20Activity&description=This%20new%20event%20that%20we%20just%20created%20is%20going%20to%20be%20amazing.%20Just%20amazing.%20Best%20event%20*ever*.%20I%20mean%2C%20*EVER*!!!!&activityDate=2017-10-16'

@@ -1,9 +1,11 @@
 package id.kibar.api.data.service
 
+import id.kibar.api.data.entity.Activity
 import id.kibar.api.data.entity.User
 import id.kibar.api.data.persistence.ActivityPersistence
 import id.kibar.api.data.persistence.UserActivityPersistence
 import id.kibar.api.data.persistence.UserPersistence
+import java.time.LocalDate
 
 class RegistrationService {
 
@@ -52,6 +54,12 @@ class RegistrationService {
             false
         }
 
+    }
+
+    fun createActivity(name: String, description: String, dateString: String): Int {
+        return activityPersistence.createActivity(
+            Activity(name = name, description = description, date = LocalDate.parse(dateString))
+        ).id
     }
 
 }

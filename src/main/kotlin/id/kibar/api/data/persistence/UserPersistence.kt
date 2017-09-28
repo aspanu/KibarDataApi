@@ -5,6 +5,7 @@ import id.kibar.api.data.entity.ActivityFactory
 import id.kibar.api.data.entity.ActivityInteraction
 import id.kibar.api.data.entity.User
 import id.kibar.api.data.entity.UserFactory
+import java.sql.Date
 import java.sql.Statement
 import java.sql.Timestamp
 import java.time.LocalDateTime
@@ -188,5 +189,34 @@ class ActivityPersistence {
             throw IllegalStateException("Activity cannot be found or we have multiple activities with the same Id")
         result.first()
         return ActivityFactory().fromRow(result)
+    }
+
+    fun createActivity(activity: Activity): Activity {
+        val conn = DbPool.getConnection()
+        conn.autoCommit = false
+        try {
+
+            val stm = conn.prepareStatement(
+                "INSERT INTO $activityTable (name, description, activity_date) VALUES (?, ?, ?);",
+                Statement.RETURN_GENERATED_KEYS
+            )
+            stm.setString(1, activity.name)
+            stm.setString(2, activity.description)
+            stm.setDate(3, Date.valueOf(activity.date))
+
+            if (stm.executeUpdate() != 1) {
+                conn.rollback()
+                throw IllegalStateException("Insert statement should only update 1 record.")
+            }
+
+            val rs = stm.generatedKeys
+            rs.first()
+            activity.id = rs.getInt(1)
+        } catch (e: Exception) {
+            conn.rollback()
+            throw e
+        }
+        conn.commit()
+        return activity
     }
 }
