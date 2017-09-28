@@ -32,7 +32,8 @@ object DbPool {
         config.addDataSourceProperty("elideSetAutoCommits", "true")
         config.addDataSourceProperty("maintainTimeStats", "false")
         config.addDataSourceProperty("maxLifetime", "60000")
-
+        // Based on: https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+        config.addDataSourceProperty("maximumPoolSize", "40")
 
         hikariDataSource = HikariDataSource(config)
     }

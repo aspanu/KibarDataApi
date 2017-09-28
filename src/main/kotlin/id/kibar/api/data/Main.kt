@@ -32,6 +32,15 @@ fun main(args: Array<String>) {
             ctx.status(204)
         }
 
+        post("/activity/create") { ctx ->
+            val activityId = regService.createActivity(
+                ctx.formParam("name")!!,
+                ctx.formParam("description")!!,
+                ctx.formParam("activityDate")!!
+            )
+            ctx.status(200).json("activityId: $activityId")
+        }
+
         post("/user/signIn") { ctx ->
             val sub = ctx.formParam("sub") ?: throw HTTPException(400)
             val email = ctx.formParam("email") ?: throw HTTPException(400)
